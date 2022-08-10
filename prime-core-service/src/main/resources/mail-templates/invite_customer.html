@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">"Prime Education System" Invite customer</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <style type="text/css">
+        body {
+            font-family: calibri, 'DejaVu Sans', Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div>"Prime Education System" Invite customer</div>
+<p>
+    Please register your account from the URL below. <br/>
+    URL for new registration: <a class="link" href="#" th: href="${url}" th: text="${url}"> url </a><br/>
+    Customer number: <b th: text="${customerNumber}"> ******* </b> <br/>
+    <br/>
+    The URL is valid for 24 hours. <br/>
+    If registration is not completed within 24 hours and the expiration date has expired, please contact the person in
+    charge. <br/>
+    <br/>
+    If you do not know this email, please discard it or give up. <br/>
+    <br/>
+    －－－－－－－－－－－－－－－－ <br/>
+    This email is automatically sent from "Prime Education System". <br/>
+    We cannot reply to this email. <br/>
+    Sender email address: <b th: text="${mailSupport}"> info@*****.co.jp </b><br/>
+    －－－－－－－－－－－－－－－－ <br/>
+</p>
+<br>
+<p>
+    <img data-th-src="|cid:goSchoolLogo|" height="80" src="images/prime-school-logo.png"/>
+</p>
+</body>
+</html>

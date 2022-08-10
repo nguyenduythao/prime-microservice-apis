@@ -1,0 +1,14 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+        <changeSet author="User" id="1" labels="1.0.0,DDL" context="dev,stg,prod">
+            <sqlFile path="/db/migration/0.0.1/001_DDL_create_table.sql"/>
+        </changeSet>
+        <changeSet author="User" id="2" labels="1.0.0,DDL" context="dev">
+            <sqlFile path="/db/migration/0.0.1/001_DML_init_data_table.sql"/>
+        </changeSet>
+
+</databaseChangeLog>

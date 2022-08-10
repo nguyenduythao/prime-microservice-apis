@@ -1,0 +1,123 @@
+version: '3.8'
+services:
+  mysql:
+    container_name: 'prime-mysql-server'
+    restart: always
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_USER:
+      MYSQL_PASSWORD:
+      MYSQL_DATABASE:
+    volumes:
+      - ./docker/mysql/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+      - data-volume:/var/lib/mysql
+
+  eureka:
+    container_name: 'prime-eureka-server'
+    restart: always
+    image: 'registry:5043/prime-eureka:latest'
+    networks:
+      - prime_network
+    environment:
+      JAVA_OPTS: '-Xms512m -Xmx2048m'
+    ports:
+      - 8761:8761
+
+  api-gateway:
+    container_name: 'prime-api-gateway'
+    restart: always
+    image: 'registry:5043/prime-gateway:latest'
+    networks:
+      - prime_network
+    environment:
+      JAVA_OPTS: '-Xms512m -Xmx2048m'
+      DOCKER_HOST:
+    ports:
+      - 8080:8080
+    depends_on:
+      - eureka
+
+  user-service:
+    container_name: 'prime-user-service'
+    restart: always
+    image: 'registry:5043/prime-user:latest'
+    networks:
+      - prime_network
+    ports:
+      - 8711:8711
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DOCKER_HOST:
+      DB_USERNAME:
+      DB_PASSWORD:
+      MAIL_ADDRESS:
+      MAIL_PASSWORD:
+    depends_on:
+      - eureka
+      - api-gateway
+
+  auth-service:
+    container_name: 'prime-auth-service'
+    restart: always
+    image: 'registry:5043/prime-auth:latest'
+    networks:
+      - prime_network
+    ports:
+      - 8668:8668
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DOCKER_HOST:
+      DB_USERNAME:
+      DB_PASSWORD:
+      JWT_STORE_PASSWORD:
+      JWT_PAIR_ALIAS:
+      JWT_PAIR_PASSWORD:
+    depends_on:
+      - eureka
+      - api-gateway
+
+  core-service:
+    container_name: 'prime-core-service'
+    restart: always
+    image: 'registry:5043/prime-core:latest'
+    networks:
+      - prime_network
+    ports:
+      - 8811:8811
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DOCKER_HOST:
+      DB_USERNAME:
+      DB_PASSWORD:
+      MAIL_ADDRESS:
+      MAIL_PASSWORD:
+    depends_on:
+      - eureka
+      - api-gateway
+
+#  client-webapp:
+#    container_name: prime-client-webapp
+#    image: 'prime-client:latest'
+#    command: npm run start
+#    ports:
+#      - 3001:3001
+#    volumes:
+#      - ../../prime-client:/prime-client
+#      - /prime-client/node_module
+#
+#  admin-webapp:
+#    container_name: prime-admin-webapp
+#    image: 'prime-admin:latest'
+#    command: npm run start
+#    ports:
+#      - 3002:3002
+#    volumes:
+#      - ../../prime-admin/:/prime-admin
+#      - /prime-admin/node_module
+
+networks:
+  prime_network:
+    driver: bridge

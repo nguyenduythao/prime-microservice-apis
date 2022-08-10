@@ -1,0 +1,46 @@
+# ===================================================================
+# Spring Boot configuration for the "docker" profile.
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+spring:
+  # Database configure
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/prime_user_db?useUnicode=yes&characterEncoding=UTF-8
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  liquibase:
+    contexts: "dev"
+    enabled: true
+  cache:
+    type: redis
+    redis:
+      host: 127.0.0.1
+      port: 6379
+
+  # Mail configure
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+
+# Oauth2 configure
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://127.0.0.1:8080/oauth/check_token
+    client:
+      client-id: clientId
+      client-secret: Aa@123456
+
+service:
+  gateway:
+    host: http://${DOCKER_HOST:localhost}:8080
+    reset-password-url: ${service.gateway.host}/password/reset?token=
+    active-account-url: ${service.gateway.host}/account/active?token=

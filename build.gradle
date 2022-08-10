@@ -1,0 +1,75 @@
+plugins {
+    id "java"
+    id "java-library"
+    id "org.springframework.boot" version "${springBootVersion}"
+    id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
+}
+
+group = 'com.prime'
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+wrapper {
+    gradleVersion = "7.4.2"
+}
+
+subprojects {
+    apply plugin: "java"
+    apply plugin: 'io.spring.dependency-management'
+
+    compileJava {
+        sourceCompatibility = JavaVersion.toVersion("${javaVersion}")
+        targetCompatibility = JavaVersion.toVersion("${javaVersion}")
+        options.encoding = "UTF-8"
+    }
+
+    compileJava.options*.compilerArgs = [
+            "-Xlint:all", "-Xlint:-processing"
+    ]
+
+    tasks.withType(Jar) {
+        destinationDirectory = file("$projectDir/build")
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    buildscript {
+        repositories {
+            maven { url "https://plugins.gradle.org/m2/" }
+        }
+
+        dependencyManagement {
+            imports {
+                mavenBom "org.springframework.boot:spring-boot-starter-parent:${springBootVersion}"
+                mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+            }
+        }
+    }
+
+    dependencies {
+        implementation("org.springframework.boot:spring-boot-starter-parent:${springBootVersion}")
+        implementation("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+    }
+
+    clean.doFirst {
+        delete "$projectDir/build"
+        delete "$projectDir/out"
+        delete "$projectDir/src/main/generated"
+    }
+}
+
+jar {
+    enabled = false
+}
+
+bootJar {
+    enabled = false
+}

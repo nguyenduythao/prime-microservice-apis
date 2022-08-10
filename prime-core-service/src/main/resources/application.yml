@@ -1,0 +1,100 @@
+# ===================================================================
+# Spring Boot configuration file
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+server:
+  port: 8811
+  servlet.context-path: /core/api
+  error:
+    include-message: always
+    include-binding-errors: always
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    status-page-url-path: /actuator/info
+    health-check-url-path: /actuator/health
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${DOCKER_HOST:localhost}:8761/eureka/
+
+spring:
+  application:
+    name: prime-core-service
+  # Add argument: SPRING_PROFILES_ACTIVE={env} || spring.profiles.active: ${PROFILE_ACTIVE}
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  # Database configure
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari.maximum-pool-size: 10
+    hikari.pool-name: Hikari
+    hikari.auto-commit: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming.physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      naming.implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  liquibase:
+    change-log: classpath:db/migration/changelog.xml
+
+  # Mail configure
+  mail:
+    properties:
+      mail:
+        no-reply: "noreply@prime.edu.com"
+        support: "info@prime.edu.com"
+      # Gmail SMTP Properties
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+  # SES SMTP Properties
+  #      mail.smtp.port: 25
+  #      mail.transport.protocol: smtp
+  #      mail.smtp.starttls.required: true
+  task:
+    execution:
+      pool:
+        core-size: 5
+        max-size: 10
+        queue-capacity: 50
+      thread-name-prefix: prime-core-task
+
+# Feign configure
+feign:
+  compression:
+    request:
+      enabled: true
+      mime-types: application/json
+      min-request-size: 2048
+    response:
+      enabled: true
+      mime-types: application/json
+  client:
+    config.default:
+      connectTimeout: 5000
+      readTimeout: 5000
+      loggerLevel: basic
+  httpclient:
+    connection-timeout: 50000
+    max-connections: 10000
+    max-connections-per-route: 1000
+
+# Logging Level
+logging:
+  file.path: /var/log/prime/core-service
+  level:
+    ROOT: INFO
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n'
+    file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%'

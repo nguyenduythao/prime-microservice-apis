@@ -1,0 +1,64 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: prime-api-gateway
+  main:
+    web-application-type: reactive
+    allow-bean-definition-overriding: true
+  cloud:
+    gateway:
+      routes:
+        - id: prime-auth-service
+          uri: lb://prime-auth-service
+          predicates:
+            - Path=/oauth/**,/auth/api/**
+
+        - id: prime-core-service
+          uri: lb://prime-core-service
+          predicates:
+            - Path=/core/api/**
+
+        - id: prime-user-service
+          uri: lb://prime-user-service
+          predicates:
+            - Path=/user/api/**
+
+        # Config redirect link reset password (web, mobile)
+        - id: reset-password-link
+          uri: lb://prime-api-gateway
+          predicates:
+            - Method=GET
+            - Path=/password/reset**
+            - Query=token
+          filters:
+            - name: TokenFilter
+              args:
+                mobileUrl: primeEducation://password/reset?token=
+                webUrl: http://${DOCKER_HOST:localhost}:3001/password/reset?token=
+
+        # Config redirect link active account (web, mobile)
+        - id: active-account-link
+          uri: lb://prime-api-gateway
+          predicates:
+            - Method=GET
+            - Path=/account/active**
+            - Query=token
+          filters:
+            - name: TokenFilter
+              args:
+                mobileUrl: primeEducation://account/active?token=
+                webUrl: http://${DOCKER_HOST:localhost}:3001/account/active?token=
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    status-page-url-path: /actuator/info
+    health-check-url-path: /actuator/health
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${DOCKER_HOST:localhost}:8761/eureka/

@@ -1,0 +1,35 @@
+# ===================================================================
+# Spring Boot configuration file
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+server:
+  port: 8668
+  error:
+    include-message: always
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    status-page-url-path: /actuator/info
+    health-check-url-path: /actuator/health
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${DOCKER_HOST:localhost}:8761/eureka/
+
+spring:
+  application:
+    name: prime-auth-service
+
+# Logging Level
+logging:
+  file.path: /var/log/prime/auth-service
+  level:
+    ROOT: INFO
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n'
+    file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%'
