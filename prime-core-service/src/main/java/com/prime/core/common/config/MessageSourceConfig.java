@@ -1,21 +1,24 @@
 package com.prime.core.common.config;
 
-import com.prime.common.config.CustomSessionLocaleResolver;
+import com.prime.common.util.ErrorMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 @Configuration
 public class MessageSourceConfig {
 
     private static final String MESSAGE_SOURCE = "classpath:messages";
+
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 
     @Bean
     public MessageSource messageSource() {
@@ -34,10 +37,7 @@ public class MessageSourceConfig {
     }
 
     @Bean
-    public LocaleResolver localeResolver() {
-        SessionLocaleResolver localeResolver = new CustomSessionLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.JAPAN);
-        return localeResolver;
+    public ErrorMessage errorMessage() {
+        return new ErrorMessage(messageSource(), httpServletRequest);
     }
-
 }

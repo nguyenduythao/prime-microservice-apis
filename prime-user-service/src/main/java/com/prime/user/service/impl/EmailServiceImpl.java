@@ -72,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
         ctx.setVariable("url", mailActiveAccountDTO.getUrl());
         ctx.setVariable("mailSupport", mailSupport);
         ctx.setVariable("schoolLogo", LOGO_IMAGE);
-        ctx.setVariable("name", mailActiveAccountDTO.getName());
+        ctx.setVariable("username", mailActiveAccountDTO.getUsername());
 
         String htmlContent = this.htmlTemplateEngine.process(MAIL_ACTIVE_ACCOUNT_TEMPLATE, ctx);
 

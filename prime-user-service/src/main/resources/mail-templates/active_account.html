@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns: th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th: remove="all">"Prime Education System" Verification email</title>
+    <title th:remove="all">"Prime Education System" Verification email</title>
     <meta http-equiv="Content-Type" content="text/html; charset = UTF-8"/>
-    <style type="text/css">
+    <style>
         body {
             font-family: calibri, 'DejaVu Sans', Arial, Helvetica, sans-serif;
         }
@@ -11,11 +11,11 @@
     <head></head>
 <body>
 <h1>"Prime Education System" Verification email</h1>
-<div> Dear <b th: text="${name}">name</b>,</div>
+<div> Dear <b th:text="${username}">name</b>,</div>
 <p>
     Thank you for using "Prime Education System". <br/>
     Please log in from the URL below. <br/>
-    Login URL: <a class="link" href="#" th: href="${url}" th: text="${url}">Click here</a><br/>
+    Login URL: <a class="link" th:href="${url}" th:text="${url}">Click here</a><br/>
     The URL is valid for 30 minutes. <br/>
     If you do not log in within 30 minutes and the expiration date has expired, please re-register your account.
     <br/>
@@ -23,7 +23,7 @@
     －－－－－－－－－－－－－－－－ <br/>
     This email is automatically sent from "Prime Education System". <br/>
     We cannot reply to this email. <br/>
-    Sender email address: <b th: text="${mailSupport}"> email </b> <br/>
+    Sender email address: <b th:text="${mailSupport}"> email </b> <br/>
     －－－－－－－－－－－－－－－－
 </p>
 <br>

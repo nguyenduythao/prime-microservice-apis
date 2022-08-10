@@ -58,7 +58,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public AuthorizationServerConfig(DataSource dataSource,
                                      AuthenticationManager authenticationManager,
                                      PasswordEncoder passwordEncoder,
-                                     @Qualifier("redisTokenStore")TokenStore tokenStore) {
+                                     @Qualifier("redisTokenStore") TokenStore tokenStore) {
         this.dataSource = dataSource;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
@@ -99,13 +99,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
         // Configure JWT content enhancement
         enhancerChain.setTokenEnhancers(delegates);
-        endpoints
-                // Enable password mode authorization
-                .authenticationManager(authenticationManager)
+        endpoints.authenticationManager(authenticationManager) // Enable password mode authorization
                 .userDetailsService(userDetailsService)
                 .accessTokenConverter(accessTokenConverter())
                 .tokenEnhancer(enhancerChain)
-                // Set the token storage method
                 .tokenStore(tokenStore);
     }
 

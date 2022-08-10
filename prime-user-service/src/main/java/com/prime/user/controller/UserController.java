@@ -43,7 +43,7 @@ public class UserController {
         return new Response<>();
     }
 
-    @PutMapping("/users/active/{token}")
+    @PostMapping("/users/active/{token}")
     public Response<?> activeUser(@PathVariable("token") String token) throws ValidationException {
         userComponent.activeUser(token);
         return new Response<>();

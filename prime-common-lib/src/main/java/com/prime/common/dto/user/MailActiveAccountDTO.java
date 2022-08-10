@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class MailActiveAccountDTO {
-    private String name;
+    private String username;
     private String subject;
     private String email;
     private String url;

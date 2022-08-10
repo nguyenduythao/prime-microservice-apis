@@ -98,6 +98,7 @@ public class UserComponentImpl implements UserComponent {
                 .token(UUID.randomUUID().toString())
                 .expireTime(expireTime)
                 .tokenType(TokenType.ACCOUNT)
+                .referenceId(userEntity.getUserId())
                 .build();
 
         tokenEntity = tokenService.create(tokenEntity);
@@ -105,8 +106,8 @@ public class UserComponentImpl implements UserComponent {
         String url = activeAccountUrl + tokenEntity.getToken();
         MailActiveAccountDTO mailActiveDTO = MailActiveAccountDTO.builder()
                 .url(url)
-                .subject("")
-                .name(userEntity.getUsername())
+                .subject("Prime System - Active account")
+                .username(userEntity.getUsername())
                 .email(userEntity.getEmail())
                 .build();
 
@@ -142,7 +143,7 @@ public class UserComponentImpl implements UserComponent {
 
         Optional<UserDetailEntity> userDetailEntityOptional = userDetailService.findById(userId);
         UserDetailEntity userDetailEntity;
-        if(userDetailEntityOptional.isEmpty()) {
+        if (userDetailEntityOptional.isEmpty()) {
             userDetailEntity = new UserDetailEntity();
             userDetailEntity.setUserId(userEntity.getUserId());
             userDetailMapper.mapToEntity(userDetailVO, userDetailEntity);
@@ -176,7 +177,7 @@ public class UserComponentImpl implements UserComponent {
         }
 
         Optional<UserEntity> opUserEntity = userService.findById(opTokenEntity.get().getReferenceId());
-        if (!opUserEntity.isPresent()) {
+        if (opUserEntity.isEmpty()) {
             throw new ValidationException(errorMessage.getError(UserErrorCode.ID_NOT_FOUND, UserEntity.Fields.userId));
         }
         UserStatus userStatus = UserStatus.ACTIVATED;

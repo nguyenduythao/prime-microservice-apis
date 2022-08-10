@@ -1,7 +1,6 @@
 package com.prime.user.model.mapper;
 
 import com.prime.common.dto.user.OAuthClientDetailDTO;
-import com.prime.common.model.mapper.BaseMapper;
 import com.prime.common.vo.user.OAuthClientDetailVO;
 import com.prime.user.model.entity.OAuthClientDetailsEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +8,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OAuthClientDetailsMapper implements BaseMapper<OAuthClientDetailVO, OAuthClientDetailsEntity, OAuthClientDetailDTO> {
+public class OAuthClientDetailsMapper {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Override
+
     public OAuthClientDetailDTO convertToDTO(final OAuthClientDetailsEntity entity) {
         return OAuthClientDetailDTO.builder()
                 .clientId(entity.getClientId())
@@ -30,7 +29,6 @@ public class OAuthClientDetailsMapper implements BaseMapper<OAuthClientDetailVO,
                 .build();
     }
 
-    @Override
     public void mapToEntity(final OAuthClientDetailVO vo, final OAuthClientDetailsEntity entity) {
         entity.setClientId(vo.getClientId());
         entity.setClientSecret(passwordEncoder.encode(vo.getClientSecret()));
