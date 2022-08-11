@@ -1,8 +1,10 @@
 package com.prime.auth.model.dto;
 
+import com.prime.common.constant.BaseConstant;
 import com.prime.common.dto.user.UserDTO;
 import com.prime.common.enums.user.UserStatus;
 import lombok.Data;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -46,6 +48,15 @@ public class CustomUserDetails implements Serializable, UserDetails {
     public boolean isAccountNonLocked() {
         if (UserStatus.USER_LOCKED.getCode().equals(this.user.getUserStatus())) return false;
         if (UserStatus.SYSTEMS_LOCKED.getCode().equals(this.user.getUserStatus())) return false;
+        return true;
+    }
+
+    public boolean isAccountNonLockedTemporary() {
+        if (user.getFailedAttempt() >= BaseConstant.MAX_FAILED_ATTEMPTS && user.getLockedTime() != null) {
+            long currentTimeInMillis = System.currentTimeMillis();
+            long isTimeLocked = DateUtils.addMinutes(user.getLockedTime(), BaseConstant.LOCKED_TIME).getTime();
+            return isTimeLocked <= currentTimeInMillis ? true : false;
+        }
         return true;
     }
 

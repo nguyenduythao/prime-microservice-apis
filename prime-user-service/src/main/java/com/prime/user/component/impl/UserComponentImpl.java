@@ -6,6 +6,7 @@ import com.prime.common.dto.user.MailActiveAccountDTO;
 import com.prime.common.dto.user.UserDTO;
 import com.prime.common.dto.user.UserDetailDTO;
 import com.prime.common.enums.TokenType;
+import com.prime.common.enums.user.RoleType;
 import com.prime.common.enums.user.UserStatus;
 import com.prime.common.exception.ErrorCode;
 import com.prime.common.exception.ValidationException;
@@ -91,6 +92,13 @@ public class UserComponentImpl implements UserComponent {
 
         UserEntity userEntity = new UserEntity();
         userMapper.mapToEntity(userVO, userEntity);
+
+        /* Set default role user */
+        Optional<RoleEntity> roleEntityOpt = roleService.findByRoleName(RoleType.ROLE_USER.name());
+        if (roleEntityOpt.isPresent()) {
+            userEntity.setRoleId(roleEntityOpt.get().getRoleId());
+        }
+
         userEntity = userService.create(userEntity);
 
         Date expireTime = DateUtils.addMinutes(new Date(), BaseConstant.ACTIVE_ACCOUNT_TOKEN_EXPIRE_TIME);

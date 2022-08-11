@@ -50,4 +50,9 @@ public class RoleServiceImpl implements RoleService {
     public void delete(RoleEntity entity) {
         roleRepository.delete(entity);
     }
+
+    @Override
+    public Optional<RoleEntity> findByRoleName(String roleName) {
+        return roleRepository.findByRoleName(roleName);
+    }
 }

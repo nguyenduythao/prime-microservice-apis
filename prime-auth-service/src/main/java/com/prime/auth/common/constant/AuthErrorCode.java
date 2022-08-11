@@ -13,7 +13,7 @@ public class AuthErrorCode {
     public static String UNSUPPORTED_RESPONSE_TYPE = "validation.auth.error.unsupportedResponseType";
     public static String ACCESS_DENIED = "validation.auth.error.accessDenied";
     public static String BAD_CREDENTIALS = "validation.auth.error.badCredentials";
-
+    public static String LOCKED_TEMPORARY = "validation.auth.error.lockedTemporary";
     public static String UNKNOWN_EXCEPTION = "validation.auth.error.unknownException";
     public static String INTERNAL_SERVER_ERROR = "validation.auth.error.server";
 }

@@ -29,7 +29,7 @@ public class ErrorMessage {
 
     private Locale getLocale() {
         AcceptHeaderLocaleResolver acceptHeaderLocaleResolver = new AcceptHeaderLocaleResolver();
-        acceptHeaderLocaleResolver.setDefaultLocale(Locale.JAPAN);
+        acceptHeaderLocaleResolver.setDefaultLocale(Locale.ENGLISH);
         return acceptHeaderLocaleResolver.resolveLocale(request);
     }
 

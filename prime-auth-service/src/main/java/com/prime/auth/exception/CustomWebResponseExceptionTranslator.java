@@ -31,40 +31,29 @@ public class CustomWebResponseExceptionTranslator implements WebResponseExceptio
         Throwable[] causeChain = throwableAnalyzer.determineCauseChain(e);
 
         Throwable exception = throwableAnalyzer.getFirstThrowableOfType(InvalidClientException.class, causeChain);
-        ErrorCode errorCode;
 
         if (exception instanceof InvalidClientException) {
-            errorCode = errorMessage.getError(AuthErrorCode.INVALID_CLIENT);
-            errorCode.setFieldName(ClientFieldName.CLIENT_ID);
-            return createResponse(HttpStatus.BAD_REQUEST.value(), errorCode);
+            return createResponse(HttpStatus.BAD_REQUEST.value(), errorMessage.getError(AuthErrorCode.INVALID_CLIENT, ClientFieldName.CLIENT_ID));
         }
 
         exception = throwableAnalyzer.getFirstThrowableOfType(UnauthorizedClientException.class, causeChain);
         if (exception instanceof UnauthorizedClientException) {
-            errorCode = errorMessage.getError(AuthErrorCode.UNAUTHORIZED_CLIENT);
-            errorCode.setFieldName(ClientFieldName.CLIENT_ID);
-            return createResponse(HttpStatus.UNAUTHORIZED.value(), errorCode);
+            return createResponse(HttpStatus.UNAUTHORIZED.value(), errorMessage.getError(AuthErrorCode.UNAUTHORIZED_CLIENT, ClientFieldName.CLIENT_ID));
         }
 
         exception = throwableAnalyzer.getFirstThrowableOfType(InvalidGrantException.class, causeChain);
         if (exception instanceof InvalidGrantException) {
-            errorCode = errorMessage.getError(AuthErrorCode.INVALID_GRANT);
-            errorCode.setFieldName(ClientFieldName.GRANT_TYPE);
-            return createResponse(HttpStatus.BAD_REQUEST.value(), errorCode);
+            return createResponse(HttpStatus.BAD_REQUEST.value(), errorMessage.getError(AuthErrorCode.INVALID_GRANT, ClientFieldName.GRANT_TYPE));
         }
 
         exception = throwableAnalyzer.getFirstThrowableOfType(InvalidScopeException.class, causeChain);
         if (exception instanceof InvalidScopeException) {
-            errorCode = errorMessage.getError(AuthErrorCode.INVALID_SCOPE);
-            errorCode.setFieldName(ClientFieldName.SCOPE);
-            return createResponse(HttpStatus.BAD_REQUEST.value(), errorCode);
+            return createResponse(HttpStatus.BAD_REQUEST.value(), errorMessage.getError(AuthErrorCode.INVALID_SCOPE, ClientFieldName.SCOPE));
         }
 
         exception = throwableAnalyzer.getFirstThrowableOfType(InvalidTokenException.class, causeChain);
         if (exception instanceof InvalidTokenException) {
-            errorCode = errorMessage.getError(AuthErrorCode.INVALID_TOKEN);
-            errorCode.setFieldName(ClientFieldName.TOKEN);
-            return createResponse(HttpStatus.BAD_REQUEST.value(), errorCode);
+            return createResponse(HttpStatus.BAD_REQUEST.value(), errorMessage.getError(AuthErrorCode.INVALID_TOKEN, ClientFieldName.TOKEN));
         }
 
         exception = throwableAnalyzer.getFirstThrowableOfType(InvalidRequestException.class, causeChain);
@@ -79,9 +68,7 @@ public class CustomWebResponseExceptionTranslator implements WebResponseExceptio
 
         exception = throwableAnalyzer.getFirstThrowableOfType(UnsupportedGrantTypeException.class, causeChain);
         if (exception instanceof UnsupportedGrantTypeException) {
-            errorCode = errorMessage.getError(AuthErrorCode.UNSUPPORTED_GRANT_TYPE);
-            errorCode.setFieldName(ClientFieldName.GRANT_TYPE);
-            return createResponse(HttpStatus.BAD_REQUEST.value(), errorCode);
+            return createResponse(HttpStatus.BAD_REQUEST.value(), errorMessage.getError(AuthErrorCode.UNSUPPORTED_GRANT_TYPE, ClientFieldName.GRANT_TYPE));
         }
 
         exception = throwableAnalyzer.getFirstThrowableOfType(UnsupportedResponseTypeException.class, causeChain);
@@ -99,15 +86,20 @@ public class CustomWebResponseExceptionTranslator implements WebResponseExceptio
             return createResponse(HttpStatus.BAD_REQUEST.value(), errorMessage.getError(AuthErrorCode.BAD_CREDENTIALS));
         }
 
+        exception = throwableAnalyzer.getFirstThrowableOfType(LockedTemporaryException.class, causeChain);
+        if (exception instanceof LockedTemporaryException) {
+            return createResponse(HttpStatus.BAD_REQUEST.value(), ((LockedTemporaryException) exception).getErrorCode());
+        }
+
         exception = throwableAnalyzer.getFirstThrowableOfType(OAuth2Exception.class, causeChain);
         if (exception instanceof OAuth2Exception) {
-            errorCode = errorMessage.getError(AuthErrorCode.UNKNOWN_EXCEPTION);
+            ErrorCode errorCode = errorMessage.getError(AuthErrorCode.UNKNOWN_EXCEPTION);
             errorCode.setCategory(ErrorCategory.SERVICE);
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorCode);
         }
 
         // Default error code
-        errorCode = errorMessage.getError(AuthErrorCode.INTERNAL_SERVER_ERROR);
+        ErrorCode errorCode = errorMessage.getError(AuthErrorCode.INTERNAL_SERVER_ERROR);
         errorCode.setCategory(ErrorCategory.SERVICE);
         return createResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorCode);
     }
