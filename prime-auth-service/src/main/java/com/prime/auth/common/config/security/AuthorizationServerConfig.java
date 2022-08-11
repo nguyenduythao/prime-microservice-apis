@@ -1,5 +1,6 @@
 package com.prime.auth.common.config.security;
 
+import com.prime.auth.exception.CustomWebResponseExceptionTranslator;
 import com.prime.auth.service.CustomClientDetailsService;
 import com.prime.auth.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
@@ -52,6 +54,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private CustomWebResponseExceptionTranslator customWebResponseExceptionTranslator;
+
     private final TokenStore tokenStore;
 
     @Autowired
@@ -68,7 +73,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
         DefaultOAuth2RequestFactory oAuth2RequestFactory = new DefaultOAuth2RequestFactory(new CustomClientDetailsService(dataSource));
-        CustomAuthenticationFilter filter = new CustomAuthenticationFilter(authenticationManager, oAuth2RequestFactory, userDetailsService);
+        OAuth2AuthenticationEntryPoint authenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
+        authenticationEntryPoint.setExceptionTranslator(customWebResponseExceptionTranslator);
+        CustomAuthenticationFilter filter = new CustomAuthenticationFilter(authenticationManager, authenticationEntryPoint, oAuth2RequestFactory, userDetailsService);
 
         security
                 // Allow form authentication
@@ -103,7 +110,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .userDetailsService(userDetailsService)
                 .accessTokenConverter(accessTokenConverter())
                 .tokenEnhancer(enhancerChain)
-                .tokenStore(tokenStore);
+                .tokenStore(tokenStore)
+                .exceptionTranslator(customWebResponseExceptionTranslator);
     }
 
     /**

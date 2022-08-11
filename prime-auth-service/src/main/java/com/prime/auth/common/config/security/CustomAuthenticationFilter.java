@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpointAuthenticationFilter;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.util.ThrowableAnalyzer;
 
 import javax.servlet.FilterChain;
@@ -36,11 +37,15 @@ public class CustomAuthenticationFilter extends TokenEndpointAuthenticationFilte
     private final AuthenticationManager authenticationManager;
     private final OAuth2RequestFactory oAuth2RequestFactory;
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, OAuth2RequestFactory oAuth2RequestFactory, UserDetailsServiceImpl userDetailsService) {
+    private final AuthenticationEntryPoint authenticationEntryPoint;
+
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint,
+                                      OAuth2RequestFactory oAuth2RequestFactory, UserDetailsServiceImpl userDetailsService) {
         super(authenticationManager, oAuth2RequestFactory);
         this.userDetailsService = userDetailsService;
         this.oAuth2RequestFactory = oAuth2RequestFactory;
         this.authenticationManager = authenticationManager;
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
     @Override
@@ -73,6 +78,7 @@ public class CustomAuthenticationFilter extends TokenEndpointAuthenticationFilte
         } catch (AuthenticationException failed) {
             SecurityContextHolder.clearContext();
             onUnsuccessfulAuthentication(request, response, failed);
+            authenticationEntryPoint.commence(request, response, failed);
             return;
         }
         chain.doFilter(request, response);
