@@ -5,80 +5,89 @@ VALUES ('clientId', '{bcrypt}$2a$10$fEb9KwsgjXwjIaHksKb1BuzUV2JvqEtSTEV3KRb9.S0d
         'password,refresh_token,client_credentials', '', 3600, 86400);
 
 # prime_role data
-INSERT INTO prime_role (role_id, role_name) VALUES (1, 'ROLE_ADMIN');
+INSERT INTO prime_role (role_id, role_name)
+VALUES (1, 'ROLE_ADMIN');
 
-INSERT INTO prime_role (role_id, role_name) VALUES (2, 'ROLE_MANAGER');
+INSERT INTO prime_role (role_id, role_name)
+VALUES (2, 'ROLE_MANAGER');
 
-INSERT INTO prime_role (role_id, role_name) VALUES (3, 'ROLE_USER');
+INSERT INTO prime_role (role_id, role_name)
+VALUES (3, 'ROLE_USER');
 
-ALTER TABLE prime_role AUTO_INCREMENT=4;
+ALTER TABLE prime_role
+    AUTO_INCREMENT = 4;
 
 # prime_user data
 INSERT INTO prime_user (user_id, username, email, password, user_status, role_id)
-VALUES (1, 'prime_admin','admin@gmail.com','{bcrypt}$2a$10$fEb9KwsgjXwjIaHksKb1BuzUV2JvqEtSTEV3KRb9.S0dJO68qJrq.',1,1);
+VALUES (1, 'prime_admin', 'admin@gmail.com', '{bcrypt}$2a$10$fEb9KwsgjXwjIaHksKb1BuzUV2JvqEtSTEV3KRb9.S0dJO68qJrq.', 1,
+        1);
 
 INSERT INTO prime_user (user_id, username, email, password, user_status, role_id)
-VALUES (2, 'prime_manager','manager@gmail.com','{bcrypt}$2a$10$fEb9KwsgjXwjIaHksKb1BuzUV2JvqEtSTEV3KRb9.S0dJO68qJrq.',1,1);
+VALUES (2, 'prime_manager', 'manager@gmail.com', '{bcrypt}$2a$10$fEb9KwsgjXwjIaHksKb1BuzUV2JvqEtSTEV3KRb9.S0dJO68qJrq.',
+        1, 1);
 
 INSERT INTO prime_user (user_id, username, email, password, user_status, role_id)
-VALUES (3, 'prime_user','user@gmail.com','{bcrypt}$2a$10$fEb9KwsgjXwjIaHksKb1BuzUV2JvqEtSTEV3KRb9.S0dJO68qJrq.',1,1);
+VALUES (3, 'prime_user', 'user@gmail.com', '{bcrypt}$2a$10$fEb9KwsgjXwjIaHksKb1BuzUV2JvqEtSTEV3KRb9.S0dJO68qJrq.', 1,
+        1);
 
-ALTER TABLE prime_user AUTO_INCREMENT=4;
+ALTER TABLE prime_user
+    AUTO_INCREMENT = 4;
 
 # prime_permission data
 INSERT INTO prime_permission (permission_id, permission_name, description, is_active)
-VALUES (1,'oauth_client_details','Operator with OAUTH_CLIENT_DETAILS table', true);
+VALUES (1, 'OAUTH_CLIENT_DETAILS', 'Operator with OAUTH_CLIENT_DETAILS table', true);
 
 INSERT INTO prime_permission (permission_id, permission_name, description, is_active)
-VALUES (2,'role','Operator with ROLE table', true);
+VALUES (2, 'ROLE', 'Operator with ROLE table', true);
 
 INSERT INTO prime_permission (permission_id, permission_name, description, is_active)
-VALUES (3,'permission','Operator with PERMISSION table', true);
+VALUES (3, 'PERMISSION', 'Operator with PERMISSION table', true);
 
 INSERT INTO prime_permission (permission_id, permission_name, description, is_active)
-VALUES (4,'role_permission','Operator with ROLE_PERMISSION table', true);
+VALUES (4, 'ROLE_PERMISSION', 'Operator with ROLE_PERMISSION table', true);
 
 INSERT INTO prime_permission (permission_id, permission_name, description, is_active)
-VALUES (5,'user','Operator with USER table', true);
+VALUES (5, 'USER', 'Operator with USER table', true);
 
 INSERT INTO prime_permission (permission_id, permission_name, description, is_active)
-VALUES (6,'user_detail','Operator with USER_DETAIL table', true);
+VALUES (6, 'USER_DETAIL', 'Operator with USER_DETAIL table', true);
 
 INSERT INTO prime_permission (permission_id, permission_name, description, is_active)
-VALUES (7,'token','Operator with TOKEN table', true);
+VALUES (7, 'TOKEN', 'Operator with TOKEN table', true);
 
-ALTER TABLE prime_permission AUTO_INCREMENT=8;
+ALTER TABLE prime_permission
+    AUTO_INCREMENT = 8;
 
 #Set role admin full permission
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(1,1,true,true,true,true,true);
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(1,2,true,true,true,true,true);
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(1,3,true,true,true,true,true);
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(1,4,true,true,true,true,true);
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(1,5,true,true,true,true,true);
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(1,6,true,true,true,true,true);
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(1,7,true,true,true,true,true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (1, 1, true, true, true, true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (1, 2, true, true, true, true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (1, 3, true, true, true, true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (1, 4, true, true, true, true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (1, 5, true, true, true, true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (1, 6, true, true, true, true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (1, 7, true, true, true, true);
 
 #Set role manager full permission - Table role_permission(4) only read, user(5), user_detail(6), token(7)
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(2,4,true,false,false,false,true);
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(2,5,true,true,true,true,true);
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(2,6,true,true,true,true,true);
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(2,7,true,true,true,true,true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (2, 4, true, true, false, true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (2, 5, true, true, false, true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (2, 6, true, true, false, true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (2, 7, true, true, true, true);
 
 #Set role user full permission - Table user(5), user_detail(6)
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(3,5,true,false,true,false,true);
-INSERT INTO prime_role_permission(role_id, permission_id, read_flag, insert_flag, update_flag, delete_flag, is_active)
-VALUES(3,6,true,false,true,false,true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (3, 5, true, true, false, true);
+INSERT INTO prime_role_permission(role_id, permission_id, read_flag, write_flag, delete_flag, is_active)
+VALUES (3, 6, true, true, false, true);
 
 

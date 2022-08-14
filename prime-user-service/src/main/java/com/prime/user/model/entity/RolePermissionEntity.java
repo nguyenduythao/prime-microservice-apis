@@ -16,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @FieldNameConstants
 @Entity
-@Table(name = "prime_authority")
+@Table(name = "prime_role_permission")
 @IdClass(RolePermissionId.class)
 public class RolePermissionEntity extends AuditField implements Serializable {
 
@@ -33,11 +33,8 @@ public class RolePermissionEntity extends AuditField implements Serializable {
     @Column(name = "read_flag", nullable = false, columnDefinition = "boolean default true")
     private Boolean readFlag;
 
-    @Column(name = "insert_flag", nullable = false, columnDefinition = "boolean default true")
+    @Column(name = "write_flag", nullable = false, columnDefinition = "boolean default true")
     private Boolean insertFlag;
-
-    @Column(name = "update_flag", nullable = false, columnDefinition = "boolean default true")
-    private Boolean updateFlag;
 
     @Column(name = "delete_flag", nullable = false, columnDefinition = "boolean default true")
     private Boolean deleteFlag;

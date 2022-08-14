@@ -5,9 +5,13 @@ import com.prime.common.exception.ErrorCode;
 import lombok.Getter;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 
+import java.io.Serializable;
+
 @Getter
 @JsonSerialize(using = CustomOAuth2ExceptionSerializer.class)
-public class CustomOAuth2Exception extends OAuth2Exception {
+public class CustomOAuth2Exception extends OAuth2Exception implements Serializable {
+
+    private static final long serialVersionUID = 3860540376209251362L;
 
     private ErrorCode error;
 

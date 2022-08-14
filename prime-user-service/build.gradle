@@ -18,7 +18,7 @@ dependencies {
 
     implementation 'org.liquibase:liquibase-core'
     implementation 'com.zaxxer:HikariCP:5.0.1'
-    implementation 'mysql:mysql-connector-java:8.0.29'
+    implementation 'mysql:mysql-connector-java:8.0.30'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation project(":prime-common-lib")
 
@@ -26,6 +26,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
+//tasks.named('test') {
+//    useJUnitPlatform()
+//}

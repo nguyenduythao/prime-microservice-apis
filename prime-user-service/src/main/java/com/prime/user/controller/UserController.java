@@ -55,7 +55,7 @@ public class UserController {
         return new Response<>();
     }
 
-    @PostMapping("/password/forgot")
+    @PostMapping("/password/reset")
     public Response<?> forgotPassword(@RequestBody @Valid ForgotPasswordVO forgotPasswordVO) {
         userComponent.forgotPassword(forgotPasswordVO);
         return new Response<>();
@@ -68,7 +68,7 @@ public class UserController {
     }
 
     @PostMapping("/password/reset/{token}")
-    public Response<?> forgotPassword(@PathVariable("token") String token, @RequestBody @Valid ResetPasswordVO resetPasswordVO) throws ValidationException {
+    public Response<?> resetPassword(@PathVariable("token") String token, @RequestBody @Valid ResetPasswordVO resetPasswordVO) throws ValidationException {
         userComponent.resetPassword(token, resetPasswordVO);
         return new Response<>();
     }
